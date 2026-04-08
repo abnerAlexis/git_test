@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Toggle Test</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #121212;
+        }
+
+        /* Matches the attribute set by JavaScript */
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+    </style>
+
+    <script>
+        // Run this immediately to prevent "white flash" on reload
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Wait for the DOM to load before attaching the click event
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('theme-toggle');
+            
+            toggleBtn.addEventListener('click', () => {
+                const htmlElement = document.documentElement;
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+                htmlElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // Optional: Update button icon
+                toggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            });
+            
+            // Set initial button icon based on loaded theme
+            if (savedTheme === 'dark') {
+                toggleBtn.textContent = '☀️';
+            }
+        });
+    </script>
+</head>
+<body>
+
+    <button id="theme-toggle" aria-label="Toggle Dark Mode">🌙</button>
+    <h1>THEME TOGGLE</h1>
+
+</body>
+</html>
